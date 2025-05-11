@@ -34,7 +34,7 @@ jobs:
 
       - name: Write Snowflake Private Key to file
         run: |
-          echo "${{ secrets.SNOWFLAKE_PRIVATE_KEY }}" > "$TF_VAR_PRIVATE_KEY_PATH"
+          echo "${{ secrets.SNOWFLAKE_PRIVATE_KEY }}" > "${{ env.TF_VAR_private_key_path }}"
 
       - name: Run Tofu Init
         run: tofu init
