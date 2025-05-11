@@ -16,6 +16,15 @@ Authenticate your GitHub Actions workflows securely with Azure using OpenID Conn
 
 Add these secrets in your repository under **Settings > Security > Secrets and variables > Actions**.
 
+### Storage Account Permisissions
+
+Make sure that AZURE_CLIENT_ID identity has the role Storage `Blob Data Owner` in the storage account.
+
+#### Required GitHub Secrets for OpenTofu to store state file in Azure Storage account
+
+* `TF_VAR_RESOURCE_GROUP_NAME` The name of the resource group of the Storage account
+* `TF_VAR_STORAGE_ACCOUNT_NAME` The name of the storage account where the identity `AZURE_CLIENT_ID` has `Blob Data Owner` and OpenTofu will store the [remote state](https://opentofu.org/docs/language/state/remote/).
+
 ## Configure Snowflake Authentication
 
 You'll use key-pair authentication for your Snowflake service user.
