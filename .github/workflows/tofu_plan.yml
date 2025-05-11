@@ -1,0 +1,42 @@
+name: 'Tofu Plan'
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+
+env:
+    TF_VAR_organization_name: ${{ secrets.TF_VAR_ORGANIZATION_NAME }}
+    TF_VAR_account_name: ${{ secrets.TF_VAR_ACCOUNT_NAME }}
+    TF_VAR_private_key_path: ${{ secrets.TF_VAR_PRIVATE_KEY_PATH }}
+    TF_VAR_resource_group_name: ${{ secrets.TF_VAR_RESOURCE_GROUP_NAME }}
+    TF_VAR_storage_account_name: ${{ secrets.TF_VAR_STORAGE_ACCOUNT_NAME }}
+    AZURE_LOCATION: 'westeurope'
+permissions:
+    id-token: write
+    contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    # environment: production # Optional: Define environment for secrets/variables
+    environment: deploy-env
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+    
+      - name: Log in to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Write Snowflake Private Key to file
+        run: |
+          echo "${{ secrets.SNOWFLAKE_PRIVATE_KEY }}" > "$TF_VAR_PRIVATE_KEY_PATH"
+
+      - name: Run Tofu Plan
+        run: tofu plan
+
+
