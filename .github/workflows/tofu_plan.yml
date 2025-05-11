@@ -1,4 +1,4 @@
-name: 'Tofu Plan'
+name: 'Deploy Snowflake IAC with Tofu'
 
 on:
   pull_request:
@@ -65,7 +65,7 @@ jobs:
         run: tofu init -backend-config="tenant_id=${{ secrets.AZURE_TENANT_ID }}" -backend-config="client_id=${{ secrets.AZURE_CLIENT_ID }}" -backend-config="subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}"
 
       - name: Run Tofu Plan
-        run: tofu plan -backend-config="tenant_id=${{ secrets.AZURE_TENANT_ID }}" -backend-config="client_id=${{ secrets.AZURE_CLIENT_ID }}" -backend-config="subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}"
+        run: tofu plan
 
       - name: Run Tofu Apply
-        run: tofu apply -auto-approve -backend-config="tenant_id=${{ secrets.AZURE_TENANT_ID }}" -backend-config="client_id=${{ secrets.AZURE_CLIENT_ID }}" -backend-config="subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}"
+        run: tofu apply -auto-approve
