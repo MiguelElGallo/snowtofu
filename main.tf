@@ -10,6 +10,8 @@ terraform {
     storage_account_name = "samiguel2025"
     container_name       = "tfs"
     key                  = "snowflake/tofu/terraform.tfstate"
+    use_oidc        = true
+    
   }
 }
 

@@ -12,6 +12,7 @@ env:
     TF_VAR_resource_group_name: ${{ secrets.TF_VAR_RESOURCE_GROUP_NAME }}
     TF_VAR_storage_account_name: ${{ secrets.TF_VAR_STORAGE_ACCOUNT_NAME }}
     AZURE_LOCATION: 'westeurope'
+    ARM_USE_OIDC: true
 permissions:
     id-token: write
     contents: read
