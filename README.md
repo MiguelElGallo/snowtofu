@@ -2,6 +2,8 @@
 
 Effortlessly deploy Snowflake objects using Tofu (open-source Terraform).
 
+![alt text](IaC.png)
+
 ## Set Up GitHub Actions with Azure OIDC
 
 Authenticate your GitHub Actions workflows securely with Azure using OpenID Connect (OIDC). Configure this by following the official [Azure Login Action documentation](https://github.com/marketplace/actions/azure-login).
@@ -49,15 +51,6 @@ In your repository settings (**Settings > Security > Secrets and variables > Act
 * `TF_VAR_ACCOUNT_NAME`: Your Snowflake account name
 * `TF_VAR_PRIVATE_KEY_PATH`: Path on the GitHub Actions runner to store the private key file
 * `SNOWFLAKE_PRIVATE_KEY`: The contents of your `snowflake_tf_snow_key.p8` file
-
-In your workflow, include a step to write the private key content securely to the specified path before running Tofu:
-
-```yaml
-- name: Write Private Key
-  run: |
-    echo "${{ secrets.SNOWFLAKE_PRIVATE_KEY }}" > ${{ secrets.TF_VAR_PRIVATE_KEY_PATH }}
-    chmod 600 ${{ secrets.TF_VAR_PRIVATE_KEY_PATH }}
-```
 
 You're now ready to deploy Snowflake resources using Tofu!
 
