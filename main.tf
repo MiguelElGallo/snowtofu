@@ -13,6 +13,7 @@ terraform {
     use_oidc        = true
     client_id     = "CLIENT_ID_PLACEHOLDER"  # This will be replaced during init
     tenant_id     = "TENANT_ID_PLACEHOLDER"  # This will be replaced during init
+    subscription_id = "SUBSCRIPTION_ID_PLACEHOLDER"  # This will be replaced during init
   }
 }
 
