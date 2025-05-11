@@ -24,6 +24,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+      
+      - name: Install OpenTofu
+        run: |
+          wget -O- https://github.com/opentofu/opentofu/releases/download/v1.6.0-alpha2/tofu_1.6.0-alpha2_amd64.deb > tofu.deb
+          sudo dpkg -i tofu.deb
+          tofu --version
     
       - name: Log in to Azure
         uses: azure/login@v2
@@ -34,37 +40,27 @@ jobs:
 
       - name: Write Snowflake Private Key to file
         run: |
+          # Debug information
+          echo "Path to use: ${{ env.TF_VAR_private_key_path }}"
+          echo "Parent directory: $(dirname "${{ env.TF_VAR_private_key_path }}")"
+          
+          # Create directory if it doesn't exist
+          mkdir -p "$(dirname "${{ env.TF_VAR_private_key_path }}")"
+          
+          # Write the key to file
           echo "${{ secrets.SNOWFLAKE_PRIVATE_KEY }}" > "${{ env.TF_VAR_private_key_path }}"
+          
+          # Set permissions
+          chmod 600 "${{ env.TF_VAR_private_key_path }}"
+          
+          # Verify file exists
+          ls -la "$(dirname "${{ env.TF_VAR_private_key_path }}")"
 
       - name: Run Tofu Init
         run: tofu init
-        env:
-          TF_VAR_organization_name: ${{ secrets.TF_VAR_ORGANIZATION_NAME }}
-          TF_VAR_account_name: ${{ secrets.TF_VAR_ACCOUNT_NAME }}
-          TF_VAR_private_key_path: ${{ secrets.TF_VAR_PRIVATE_KEY_PATH }}
-          TF_VAR_resource_group_name: ${{ secrets.TF_VAR_RESOURCE_GROUP_NAME }}
-          TF_VAR_storage_account_name: ${{ secrets.TF_VAR_STORAGE_ACCOUNT_NAME }}
-          AZURE_LOCATION: 'westeurope'
-          SNOWFLAKE_PRIVATE_KEY: ${{ secrets.SNOWFLAKE_PRIVATE_KEY }}
 
       - name: Run Tofu Plan
         run: tofu plan
-        env:
-          TF_VAR_organization_name: ${{ secrets.TF_VAR_ORGANIZATION_NAME }}
-          TF_VAR_account_name: ${{ secrets.TF_VAR_ACCOUNT_NAME }}
-          TF_VAR_private_key_path: ${{ secrets.TF_VAR_PRIVATE_KEY_PATH }}
-          TF_VAR_resource_group_name: ${{ secrets.TF_VAR_RESOURCE_GROUP_NAME }}
-          TF_VAR_storage_account_name: ${{ secrets.TF_VAR_STORAGE_ACCOUNT_NAME }}
-          AZURE_LOCATION: 'westeurope'
-          SNOWFLAKE_PRIVATE_KEY: ${{ secrets.SNOWFLAKE_PRIVATE_KEY }}
 
-      - name: Run Tofu Plan
-        run: tofu apply
-        env:
-          TF_VAR_organization_name: ${{ secrets.TF_VAR_ORGANIZATION_NAME }}
-          TF_VAR_account_name: ${{ secrets.TF_VAR_ACCOUNT_NAME }}
-          TF_VAR_private_key_path: ${{ secrets.TF_VAR_PRIVATE_KEY_PATH }}
-          TF_VAR_resource_group_name: ${{ secrets.TF_VAR_RESOURCE_GROUP_NAME }}
-          TF_VAR_storage_account_name: ${{ secrets.TF_VAR_STORAGE_ACCOUNT_NAME }}
-          AZURE_LOCATION: 'westeurope'
-          SNOWFLAKE_PRIVATE_KEY: ${{ secrets.SNOWFLAKE_PRIVATE_KEY }}
+      - name: Run Tofu Apply
+        run: tofu apply -auto-approve
