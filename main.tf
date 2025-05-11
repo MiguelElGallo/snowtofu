@@ -11,9 +11,8 @@ terraform {
     container_name       = "tfs"
     key                  = "snowflake/tofu/terraform.tfstate"
     use_oidc        = true
-    client_id     = "336fb2b3-823f-4f7e-8f74-db1f39553399"
-
-
+    client_id     = "CLIENT_ID_PLACEHOLDER"  # This will be replaced during init
+    tenant_id     = "TENANT_ID_PLACEHOLDER"  # This will be replaced during init
   }
 }
 

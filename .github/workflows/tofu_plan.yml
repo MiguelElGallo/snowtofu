@@ -62,10 +62,10 @@ jobs:
           ls -la "$(dirname "${{ env.TF_VAR_private_key_path }}")"
 
       - name: Run Tofu Init
-        run: tofu init
+        run: tofu init -backend-config="tenant_id=${{ secrets.AZURE_TENANT_ID }}" -backend-config="client_id=${{ secrets.AZURE_CLIENT_ID }}"
 
       - name: Run Tofu Plan
-        run: tofu plan
+        run: tofu plan -backend-config="tenant_id=${{ secrets.AZURE_TENANT_ID }}" -backend-config="client_id=${{ secrets.AZURE_CLIENT_ID }}"
 
       - name: Run Tofu Apply
-        run: tofu apply -auto-approve
+        run: tofu apply -auto-approve -backend-config="tenant_id=${{ secrets.AZURE_TENANT_ID }}" -backend-config="client_id=${{ secrets.AZURE_CLIENT_ID }}"
